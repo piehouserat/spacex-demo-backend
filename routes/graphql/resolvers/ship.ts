@@ -7,11 +7,15 @@ const ships = async (rootValue, { input }: QueryShipsArgs, context: GraphqlConte
   return shipController.get(input, context);
 };
 
+const shipMissingAttributes = async (rootValue, { input }, context: GraphqlContext) => {
+  return shipController.getMissingAttributes(input, context);
+};
+
 // const addShip = async (rootValue, _, context: GraphqlContext): Promise<ShipAttributes | null> => {
 //   return null;
 // };
 
-const query = { ships };
+const query = { ships, shipMissingAttributes };
 
 const mutation = {};
 

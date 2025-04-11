@@ -2,58 +2,50 @@ import { Sequelize, Model, DataTypes, InferAttributes, InferCreationAttributes, 
 
 type OmitTypes = '';
 
-class Ship extends Model<
+class Mission extends Model<
   InferAttributes<
-    Ship,
+    Mission,
     {
       omit: OmitTypes;
     }
   >,
   InferCreationAttributes<
-    Ship,
+    Mission,
     {
       omit: OmitTypes;
     }
   >
 > {
   declare id: CreationOptional<string>;
-  declare class?: string | null;
-  declare name?: string | null;
-  declare image?: string | null;
-  declare active: boolean;
-  declare year_built?: number | null;
-  declare home_port?: string | null;
-  declare type?: string | null;
+  declare flight?: string | null;
+  declare name: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+  declare shipId: CreationOptional<string>;
 
   static initModel(sequelize: Sequelize) {
-    Ship.init(
+    Mission.init(
       {
         id: {
           type: DataTypes.UUID,
           primaryKey: true,
           defaultValue: DataTypes.UUIDV4,
         },
-        class: { type: DataTypes.STRING, allowNull: true },
-        name: { type: DataTypes.STRING, allowNull: true },
-        image: { type: DataTypes.STRING, allowNull: true },
-        active: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
-        year_built: { type: DataTypes.INTEGER, allowNull: true },
-        home_port: { type: DataTypes.STRING, allowNull: true },
-        type: { type: DataTypes.STRING, allowNull: true },
+        flight: { type: DataTypes.STRING, allowNull: true },
+        name: { type: DataTypes.STRING, allowNull: false },
         createdAt: { type: DataTypes.DATE, allowNull: false },
         updatedAt: { type: DataTypes.DATE, allowNull: false },
+        shipId: { type: DataTypes.UUID, allowNull: false },
       },
       {
         sequelize,
       },
     );
 
-    return Ship;
+    return Mission;
   }
   // public static associate = ({  }) => {
   // };
 }
 
-export { Ship, Ship as ShipAttributes };
+export { Mission, Mission as MissionAttributes };
