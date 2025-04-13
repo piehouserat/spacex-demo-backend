@@ -27,6 +27,13 @@ export type BlockAppInput = {
   deviceBrand: Scalars['String'];
 };
 
+export type Mission = {
+  __typename?: 'Mission';
+  description?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   addUser?: Maybe<User>;
@@ -40,6 +47,7 @@ export type PaginationInput = {
 export type Query = {
   __typename?: 'Query';
   blockApp: BlockApp;
+  shipMissingAttributes: Array<ShipMissingAttributes>;
   ships?: Maybe<Array<Ship>>;
   user: User;
 };
@@ -47,6 +55,11 @@ export type Query = {
 
 export type QueryBlockAppArgs = {
   input: BlockAppInput;
+};
+
+
+export type QueryShipMissingAttributesArgs = {
+  input: ShipMissingAttributesInput;
 };
 
 
@@ -63,9 +76,24 @@ export type Ship = {
   __typename?: 'Ship';
   active: Scalars['Boolean'];
   class?: Maybe<Scalars['String']>;
+  home_port?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
+  missions?: Maybe<Array<Maybe<Mission>>>;
   name?: Maybe<Scalars['String']>;
+  type?: Maybe<Scalars['String']>;
+  year_built?: Maybe<Scalars['Int']>;
+};
+
+export type ShipMissingAttributes = {
+  __typename?: 'ShipMissingAttributes';
+  missingCount: Scalars['Int'];
+  shipId: Scalars['ID'];
+};
+
+export type ShipMissingAttributesInput = {
+  attributes: Array<Scalars['String']>;
+  pagination: PaginationInput;
 };
 
 export type ShipsInput = {
@@ -163,10 +191,13 @@ export type ResolversTypes = {
   Date: ResolverTypeWrapper<Scalars['Date']>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mission: ResolverTypeWrapper<Mission>;
   Mutation: ResolverTypeWrapper<{}>;
   PaginationInput: PaginationInput;
   Query: ResolverTypeWrapper<{}>;
   Ship: ResolverTypeWrapper<Ship>;
+  ShipMissingAttributes: ResolverTypeWrapper<ShipMissingAttributes>;
+  ShipMissingAttributesInput: ShipMissingAttributesInput;
   ShipsInput: ShipsInput;
   String: ResolverTypeWrapper<Scalars['String']>;
   User: ResolverTypeWrapper<User>;
@@ -181,10 +212,13 @@ export type ResolversParentTypes = {
   Date: Scalars['Date'];
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Mission: Mission;
   Mutation: {};
   PaginationInput: PaginationInput;
   Query: {};
   Ship: Ship;
+  ShipMissingAttributes: ShipMissingAttributes;
+  ShipMissingAttributesInput: ShipMissingAttributesInput;
   ShipsInput: ShipsInput;
   String: Scalars['String'];
   User: User;
@@ -201,12 +235,20 @@ export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Date';
 }
 
+export type MissionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mission'] = ResolversParentTypes['Mission']> = {
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
   addUser?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   blockApp?: Resolver<ResolversTypes['BlockApp'], ParentType, ContextType, RequireFields<QueryBlockAppArgs, 'input'>>;
+  shipMissingAttributes?: Resolver<Array<ResolversTypes['ShipMissingAttributes']>, ParentType, ContextType, RequireFields<QueryShipMissingAttributesArgs, 'input'>>;
   ships?: Resolver<Maybe<Array<ResolversTypes['Ship']>>, ParentType, ContextType, RequireFields<QueryShipsArgs, 'input'>>;
   user?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<QueryUserArgs, 'input'>>;
 };
@@ -214,9 +256,19 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 export type ShipResolvers<ContextType = any, ParentType extends ResolversParentTypes['Ship'] = ResolversParentTypes['Ship']> = {
   active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   class?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  home_port?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  missions?: Resolver<Maybe<Array<Maybe<ResolversTypes['Mission']>>>, ParentType, ContextType>;
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  type?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  year_built?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type ShipMissingAttributesResolvers<ContextType = any, ParentType extends ResolversParentTypes['ShipMissingAttributes'] = ResolversParentTypes['ShipMissingAttributes']> = {
+  missingCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  shipId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
@@ -235,9 +287,11 @@ export type UserResolvers<ContextType = any, ParentType extends ResolversParentT
 export type Resolvers<ContextType = any> = {
   BlockApp?: BlockAppResolvers<ContextType>;
   Date?: GraphQLScalarType;
+  Mission?: MissionResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
   Ship?: ShipResolvers<ContextType>;
+  ShipMissingAttributes?: ShipMissingAttributesResolvers<ContextType>;
   User?: UserResolvers<ContextType>;
 };
 

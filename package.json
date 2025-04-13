@@ -10,7 +10,9 @@
     "lint": "eslint --ext .js,.jsx,.ts,.tsx .",
     "ci": "yarn lint && yarn spec",
     "generate:codegen": "graphql-codegen --config codegen.yml",
-    "deploy": "chmod +x server.ts && ./node_modules/.bin/serverless deploy"
+    "deploy": "chmod +x server.ts && ./node_modules/.bin/serverless deploy",
+    "migrate:up": "serverless invoke local --stage local --function dbUp",
+    "migrate:down": "serverless invoke local --stage local --function dbDown"
   },
   "author": "app",
   "license": "ISC",

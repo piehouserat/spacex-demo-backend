@@ -6,6 +6,7 @@ import { db } from '../models';
 import { cleanDb } from '../helpers/testHelpers';
 import fetch from 'node-fetch';
 import { faker } from '@faker-js/faker';
+import type { ShipAttributes } from '../models/Ship';
 
 const populate = async () => {
   await cleanDb();
@@ -20,7 +21,7 @@ const populate = async () => {
     .then(data => data.data.ships);
 
   await Promise.all(
-    ships.map((ship: any) => {
+    ships.map((ship: ShipAttributes) => {
       return db.Ship.create({
         active: ship.active,
         name: ship.name,
@@ -34,22 +35,24 @@ const populate = async () => {
   );
 
   // Create fake missions
-  const missionCount = 20;
-  const missionNames = Array.from({ length: missionCount }, () =>
-    `Mission ${faker.animal.type()} ${faker.datatype.number({ min: 1, max: 100 })}`
-  );
+  const missionCount = 60;
+  const missions = Array.from({ length: missionCount }, () => {
+    return {
+      name: `Mission ${faker.animal.type()}-${faker.datatype.number({ min: 1, max: 100 })}`,
+      description: faker.lorem.sentence(),
+    };
+  });
 
   const allShips = await db.Ship.findAll();
 
   await Promise.all(
-    missionNames.map(async (missionName) => {
-      // Get a random ship
-      const randomShip = allShips[Math.floor(Math.random() * allShips.length)];
+    missions.map(async mission => {
+      const randomShip = faker.helpers.arrayElement(allShips);
 
       return db.Mission.create({
-        name: missionName,
-        flight: `Flight-${faker.datatype.number({ min: 1000, max: 9999 })}`,
-        shipId: randomShip.id,
+        name: mission.name,
+        description: mission.description,
+        ShipId: randomShip.id,
       });
     }),
   );

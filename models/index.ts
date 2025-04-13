@@ -1,10 +1,10 @@
-import { Sequelize } from 'sequelize';
 import { config } from '../config';
-import { DataTypeAbstract, ModelAttributeColumnOptions } from 'sequelize';
+import { DataTypeAbstract, ModelAttributeColumnOptions, Sequelize } from 'sequelize';
+
 import { User } from './User';
 import { Address } from './Address';
-import { Ship } from './ship';
-import { Mission } from './mission';
+import { Ship } from './Ship';
+import { Mission } from './Mission';
 
 declare global {
   type SequelizeAttributes<T extends { [key: string]: any }> = {
@@ -37,10 +37,6 @@ Object.keys(db).map(key => {
     db[key].associate(db);
   }
 });
-
-db.Ship.hasMany(db.Mission, { foreignKey: 'shipId', as: 'missions' });
-
-db.Mission.belongsTo(db.Ship, { foreignKey: 'shipId' });
 
 const sync = async () => {
   await sequelize.sync({ force: false });

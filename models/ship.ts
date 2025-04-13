@@ -52,8 +52,9 @@ class Ship extends Model<
 
     return Ship;
   }
-  // public static associate = ({  }) => {
-  // };
+  public static associate = ({ Mission }) => {
+    Ship.hasMany(Mission, { as: 'missions' });
+  };
 }
 
 export { Ship, Ship as ShipAttributes };

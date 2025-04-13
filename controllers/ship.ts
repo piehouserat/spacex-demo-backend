@@ -1,8 +1,8 @@
 import { PaginationInput } from '../common/types/backend';
 import { AuthScope } from '../config';
 import { db } from '../models';
-import { Mission } from '../models/mission';
-import { ShipAttributes } from '../models/ship';
+import { Mission } from '../models/Mission';
+import { ShipAttributes } from '../models/Ship';
 
 const VALID_SHIP_ATTRIBUTES = ['class', 'name', 'image', 'year_built', 'home_port', 'type'] as const;
 type ValidShipAttribute = typeof VALID_SHIP_ATTRIBUTES[number];

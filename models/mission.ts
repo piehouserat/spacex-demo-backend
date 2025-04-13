@@ -1,4 +1,13 @@
-import { Sequelize, Model, DataTypes, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize';
+import {
+  Sequelize,
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+  type ForeignKey,
+} from 'sequelize';
+import { Ship } from './Ship';
 
 type OmitTypes = '';
 
@@ -17,11 +26,11 @@ class Mission extends Model<
   >
 > {
   declare id: CreationOptional<string>;
-  declare flight?: string | null;
   declare name: string;
+  declare description?: string | null;
+  declare ShipId: ForeignKey<Ship['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-  declare shipId: CreationOptional<string>;
 
   static initModel(sequelize: Sequelize) {
     Mission.init(
@@ -31,11 +40,10 @@ class Mission extends Model<
           primaryKey: true,
           defaultValue: DataTypes.UUIDV4,
         },
-        flight: { type: DataTypes.STRING, allowNull: true },
         name: { type: DataTypes.STRING, allowNull: false },
+        description: { type: DataTypes.STRING, allowNull: true },
         createdAt: { type: DataTypes.DATE, allowNull: false },
         updatedAt: { type: DataTypes.DATE, allowNull: false },
-        shipId: { type: DataTypes.UUID, allowNull: false },
       },
       {
         sequelize,
@@ -44,8 +52,9 @@ class Mission extends Model<
 
     return Mission;
   }
-  // public static associate = ({  }) => {
-  // };
+  public static associate = ({ Ship }) => {
+    Mission.belongsTo(Ship);
+  };
 }
 
 export { Mission, Mission as MissionAttributes };

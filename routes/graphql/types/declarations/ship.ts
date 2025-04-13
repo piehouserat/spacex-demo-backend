@@ -3,8 +3,8 @@ import { gql } from 'graphql-tag';
 export const Ship = gql`
   type Mission {
     id: ID!
-    flight: String
     name: String
+    description: String
   }
 
   type Ship {
